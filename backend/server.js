@@ -14,12 +14,8 @@ const PORT = process.env.PORT || 5000;
 // Allow file:// origin (null), localhost on any port, and 127.0.0.1
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (file://, Postman, curl etc.)
-    if (!origin || origin === 'null') return callback(null, true);
-    if (origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) {
-      return callback(null, true);
-    }
-    callback(new Error('Not allowed by CORS'));
+    // Allow all origins for the portfolio project to easily connect Netlify/Render
+    callback(null, true);
   },
   credentials: true
 }));
