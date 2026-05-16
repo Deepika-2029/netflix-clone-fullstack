@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: netflix-clone-fullstack
+    env: node
+    buildCommand: "cd backend && npm install"
+    startCommand: "cd backend && npm start"
+    envVars:
+      - key: NODE_VERSION
+        value: "20.x"
+      - key: TMDB_API_KEY
+        value: "8265bd1679663a7ea12ac168da84d2e8"
+      - key: TMDB_BASE_URL
+        value: "https://api.themoviedb.org/3"
+      - key: JWT_SECRET
+        value: "netflix_clone_super_secret_jwt_key_2024"
