@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Netflix Clone - API Connection Test</title>
+  <style>
+    body { font-family: Arial; background: #141414; color: #fff; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; }
+    h1 { color: #e50914; }
+    .test { padding: 15px; margin: 10px 0; border: 1px solid #333; border-radius: 4px; background: #1a1a1a; }
+    .test.pass { border-color: #46d369; background: rgba(70,211,105,0.1); }
+    .test.fail { border-color: #e87c03; background: rgba(232,124,3,0.1); }
+    .status { font-weight: bold; margin-bottom: 10px; }
+    button { background: #e50914; color: #fff; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 10px 0; }
+    button:hover { background: #f40612; }
+    pre { background: #0a0a0a; padding: 10px; border-radius: 4px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 Netflix Clone - API Connection Test</h1>
+    
+    <div class="test">
+      <div class="status">Backend Health Check</div>
+      <button onclick="testHealth()">Test Backend Connection</button>
+      <div id="healthResult"></div>
+    </div>
+
+    <div class="test">
+      <div class="status">Test Movies API</div>
+      <button onclick="testMovies()">Fetch Trending Movies</button>
+      <div id="moviesResult"></div>
+    </div>
+
+    <div class="test">
+      <div class="status">API URL Configuration</div>
+      <div id="urlResult"></div>
+    </div>
+
+    <div class="test">
+      <div class="status">Netlify Redirect Test</div>
+      <button onclick="testRedirect()">Test /api Redirect</button>
+      <div id="redirectResult"></div>
+    </div>
+  </div>
+
+  <script>
+    const API = '/api';
+    const BACKEND = 'https://netflix-clone-fullstack-1.onrender.com';
+
+    // Show API URL
+    document.getElementById('urlResult').innerHTML = `
+      <p><strong>Frontend API:</strong> ${API}</p>
+      <p><strong>Backend URL:</strong> ${BACKEND}</p>
+      <p><strong>Current Domain:</strong> ${window.location.origin}</p>
+    `;
+
+    async function testHealth() {
+      const result = document.getElementById('healthResult');
+      result.innerHTML = 'Testing...';
+      try {
+        const res = await fetch(`${API}/health`);
+        const data = await res.json();
+        result.innerHTML = `<pre class="pass">✅ Success!\n${JSON.stringify(data, null, 2)}</pre>`;
+      } catch (err) {
+        result.innerHTML = `<pre class="fail">❌ Error: ${err.message}</pre>`;
+      }
+    }
+
+    async function testMovies() {
+      const result = document.getElementById('moviesResult');
+      result.innerHTML = 'Testing...';
+      try {
+        const res = await fetch(`${API}/movies/trending`);
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          result.innerHTML = `<pre class="pass">✅ Success! Found ${data.results.length} movies\n${JSON.stringify(data.results.slice(0,1), null, 2)}</pre>`;
+        } else {
+          result.innerHTML = `<pre class="fail">❌ No movies found</pre>`;
+        }
+      } catch (err) {
+        result.innerHTML = `<pre class="fail">❌ Error: ${err.message}</pre>`;
+      }
+    }
+
+    async function testRedirect() {
+      const result = document.getElementById('redirectResult');
+      result.innerHTML = 'Testing...';
+      try {
+        const res = await fetch(`${API}/health`);
+        if (res.status === 200) {
+          result.innerHTML = `<pre class="pass">✅ Netlify Redirect Working!\nStatus: ${res.status}\nURL: ${res.url}</pre>`;
+        } else {
+          result.innerHTML = `<pre class="fail">❌ Status: ${res.status}</pre>`;
+        }
+      } catch (err) {
+        result.innerHTML = `<pre class="fail">❌ Redirect Failed: ${err.message}</pre>`;
+      }
+    }
+  </script>
+</body>
+</html>

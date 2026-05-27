@@ -151,7 +151,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const faqQ = item.querySelector('h3');
                     const faqA = item.querySelector('.accordion-content p');
                     if (faqQ) faqQ.textContent = t.faqItems[index].q;
-                    if (faqA) faqA.innerHTML = t.faqItems[index].a;
+                    if (faqA) {
+                        faqA.innerHTML = '';
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = t.faqItems[index].a;
+                        Array.from(tempDiv.childNodes).forEach(node => {
+                            faqA.appendChild(node.cloneNode(true));
+                        });
+                    }
                 }
             });
         }
